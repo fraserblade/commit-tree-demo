@@ -3,100 +3,87 @@ import java.util.List;
 import java.util.Random;
 
 class Employee {
-    private String firstName;
-    private String lastName;
-    private List<Employee> directReportsEmployees;
-    private double commitCount;
+    private final String name;
+    private final List<Employee> directReports;
+    private int commitCount;
+    static Random random = new Random();
 
-    public Employee(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.directReportsEmployees = new ArrayList<>();
-        this.commitCount = 0.0;
+    public Employee() {
+        this(random.nextInt(100));
     }
 
-    public void addSubordinate(Employee employee) {
-        directReportsEmployees.add(employee);
+    public Employee(int commits){
+        this (NameHelper.getRandomName(), commits);
     }
 
-    public List<Employee> getReportsEmployees() {
-        return directReportsEmployees;
+    public Employee(String name, int commits) {
+        this.name = name;
+        this.directReports = new ArrayList<>();
+        this.commitCount = commits;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public void addReport(Employee employee) {
+        directReports.add(employee);
     }
 
-    public String getLastName() {
-        return lastName;
+    public List<Employee> getReports() {
+        return directReports;
     }
 
-    public double getCommits() {
+    public String getName() {
+        return name;
+    }
+
+    public int getCommits() {
         return commitCount;
     }
 
-    public void addCommitTotal(double commits) {
-        commitCount += commits;
+    @Override
+    public String toString() {
+        return this.getName();
     }
 }
 
 public class CommitTree {
-    private static final String[] RANDOM_FIRST_NAMES = {
-        "Alice", "Bob", "Carol", "David", "Eve", "Frank", "Grace", "Helen", "Isaac", "Jack"
-    };
-    
-    private static final String[] RANDOM_LAST_NAMES = {
-        "Smith", "Johnson", "Brown", "Davis", "Wilson", "Anderson", "Clark", "Wright", "Walker", "Hall"
-    };
 
-    private static String getRandomFirstName() {
-        Random random = new Random();
-        int index = random.nextInt(RANDOM_FIRST_NAMES.length);
-        return RANDOM_FIRST_NAMES[index];
-    }
-    
-    private static String getRandomLastName() {
-        Random random = new Random();
-        int index = random.nextInt(RANDOM_LAST_NAMES.length);
-        return RANDOM_LAST_NAMES[index];
-    }
+    public static final int MAX_REPORTS = 9;
 
     public static void traverseHierarchy(Employee manager, String indent) {
-        System.out.println(indent + manager.getFirstName() + " " + manager.getLastName() + " (Commits: " + manager.getCommits
-    () + ")");
-        for (Employee employee : manager.getReportsEmployees()) {
+        System.out.println(indent + manager + " " + "\t\t(Commits: " + manager.getCommits() + ")");
+        for (Employee employee : manager.getReports()) {
             traverseHierarchy(employee, indent + "  ");
         }
     }
 
-    public static double aggregateCommits(Employee manager) {
-        double totalSales = manager.getCommits
-    ();
-        for (Employee employee : manager.getReportsEmployees()) {
-            totalSales += aggregateCommits(employee);
+    public static int aggregateCommits(Employee manager) {
+        int totalcommits = manager.getCommits();
+        for (Employee employee : manager.getReports()) {
+            totalcommits += aggregateCommits(employee);
         }
-        return totalSales;
+        return totalcommits;
     }
 
     public static void main(String[] args) {
-        Employee ceo = new Employee("Charlie", "Nunn" + " (CTO)");
-        ceo.addCommitTotal(50000.0);
+        Random random = new Random();
 
-        Employee manager1 = new Employee(getRandomFirstName(), getRandomLastName() + " (Manager)");
-        manager1.addCommitTotal(0);
-        manager1.addSubordinate(new Employee(getRandomFirstName(), getRandomLastName() + " (Employee)"));
-        manager1.addSubordinate(new Employee(getRandomFirstName(), getRandomLastName() + " (Employee)"));
+        Employee ceo = new Employee("Charlie Eric OWens" + " (CEO)", 0);
+        Employee manager = null;
 
-        Employee manager2 = new Employee(getRandomFirstName(), getRandomLastName() + " (Manager)");
-        manager2.addCommitTotal(15000.0);
-        manager2.addSubordinate(new Employee(getRandomFirstName(), getRandomLastName() + " (Employee)"));
-
-        ceo.addSubordinate(manager1);
-        ceo.addSubordinate(manager2);
+        for(int i = 0; i < random.nextInt(MAX_REPORTS); i++ ) {
+            manager = new Employee();
+            for (int j = 0; j < random.nextInt(MAX_REPORTS); j++) {
+                manager.addReport(new Employee());
+            }
+            ceo.addReport(manager);
+        }
 
         traverseHierarchy(ceo, "");
 
-        double totalSales = aggregateCommits(ceo);
-        System.out.println("Total commits for CEO: " + totalSales);
+        int totalCommits = aggregateCommits(ceo);
+        System.out.println("Total commits for CEO: " + totalCommits);
+
+        totalCommits = aggregateCommits(manager);
+        System.out.println("Total commits for  " + manager + ", " + totalCommits);
+
     }
 }
