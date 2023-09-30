@@ -47,6 +47,7 @@ class Employee {
 public class CommitTree {
 
     public static final int MAX_REPORTS = 9;
+    static Random random = new Random();
 
     public static void traverseHierarchy(Employee manager, String indent) {
         System.out.println(indent + manager + " " + "\t\t(Commits: " + manager.getCommits() + ")");
@@ -64,8 +65,9 @@ public class CommitTree {
     }
 
     public static void main(String[] args) {
-        Random random = new Random();
 
+        // Construct the employee hierarchy
+        //
         Employee ceo = new Employee("Charlie Eric OWens" + " (CEO)", 0);
         Employee manager = null;
 
@@ -77,13 +79,16 @@ public class CommitTree {
             ceo.addReport(manager);
         }
 
+        // Walk the whole hierarchy
+        //
         traverseHierarchy(ceo, "");
 
+        // Walk the hierarchy and total the commits
+        //
         int totalCommits = aggregateCommits(ceo);
         System.out.println("Total commits for CEO: " + totalCommits);
 
         totalCommits = aggregateCommits(manager);
         System.out.println("Total commits for  " + manager + ", " + totalCommits);
-
     }
 }
