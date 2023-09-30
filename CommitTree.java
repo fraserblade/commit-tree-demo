@@ -5,22 +5,22 @@ import java.util.Random;
 class Employee {
     private String firstName;
     private String lastName;
-    private List<Employee> subordinates;
-    private double salesTotal;
+    private List<Employee> directReportsEmployees;
+    private double commitCount;
 
     public Employee(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.subordinates = new ArrayList<>();
-        this.salesTotal = 0.0;
+        this.directReportsEmployees = new ArrayList<>();
+        this.commitCount = 0.0;
     }
 
     public void addSubordinate(Employee employee) {
-        subordinates.add(employee);
+        directReportsEmployees.add(employee);
     }
 
-    public List<Employee> getSubordinates() {
-        return subordinates;
+    public List<Employee> getReportsEmployees() {
+        return directReportsEmployees;
     }
 
     public String getFirstName() {
@@ -31,12 +31,12 @@ class Employee {
         return lastName;
     }
 
-    public double getSalesTotal() {
-        return salesTotal;
+    public double getCommits() {
+        return commitCount;
     }
 
-    public void addToSalesTotal(double salesAmount) {
-        salesTotal += salesAmount;
+    public void addCommitTotal(double commits) {
+        commitCount += commits;
     }
 }
 
@@ -62,31 +62,33 @@ public class CommitTree {
     }
 
     public static void traverseHierarchy(Employee manager, String indent) {
-        System.out.println(indent + manager.getFirstName() + " " + manager.getLastName() + " (Sales: $" + manager.getSalesTotal() + ")");
-        for (Employee employee : manager.getSubordinates()) {
+        System.out.println(indent + manager.getFirstName() + " " + manager.getLastName() + " (Commits: " + manager.getCommits
+    () + ")");
+        for (Employee employee : manager.getReportsEmployees()) {
             traverseHierarchy(employee, indent + "  ");
         }
     }
 
-    public static double aggregateSales(Employee manager) {
-        double totalSales = manager.getSalesTotal();
-        for (Employee employee : manager.getSubordinates()) {
-            totalSales += aggregateSales(employee);
+    public static double aggregateCommits(Employee manager) {
+        double totalSales = manager.getCommits
+    ();
+        for (Employee employee : manager.getReportsEmployees()) {
+            totalSales += aggregateCommits(employee);
         }
         return totalSales;
     }
 
     public static void main(String[] args) {
-        Employee ceo = new Employee(getRandomFirstName(), getRandomLastName() + " (CEO)");
-        ceo.addToSalesTotal(50000.0);
+        Employee ceo = new Employee("Charlie", "Nunn" + " (CTO)");
+        ceo.addCommitTotal(50000.0);
 
         Employee manager1 = new Employee(getRandomFirstName(), getRandomLastName() + " (Manager)");
-        manager1.addToSalesTotal(20000.0);
+        manager1.addCommitTotal(0);
         manager1.addSubordinate(new Employee(getRandomFirstName(), getRandomLastName() + " (Employee)"));
         manager1.addSubordinate(new Employee(getRandomFirstName(), getRandomLastName() + " (Employee)"));
 
         Employee manager2 = new Employee(getRandomFirstName(), getRandomLastName() + " (Manager)");
-        manager2.addToSalesTotal(15000.0);
+        manager2.addCommitTotal(15000.0);
         manager2.addSubordinate(new Employee(getRandomFirstName(), getRandomLastName() + " (Employee)"));
 
         ceo.addSubordinate(manager1);
@@ -94,7 +96,7 @@ public class CommitTree {
 
         traverseHierarchy(ceo, "");
 
-        double totalSales = aggregateSales(ceo);
-        System.out.println("Total Sales: $" + totalSales);
+        double totalSales = aggregateCommits(ceo);
+        System.out.println("Total commits for CEO: " + totalSales);
     }
 }
