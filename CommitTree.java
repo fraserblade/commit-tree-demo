@@ -2,71 +2,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-class Employee {
-    private final String name;
-    private final List<Employee> directReports;
-    private int commitCount;
-    static Random random = new Random();
-
-    public Employee() {
-        this(random.nextInt(50));
-    }
-
-    public Employee(int commits){
-        this (NameHelper.getRandomName(), commits);
-    }
-
-    public Employee(String name, int commits) {
-        this.name = name;
-        this.directReports = new ArrayList<>();
-        this.commitCount = commits;
-    }
-
-    public void addReport(Employee employee) {
-        directReports.add(employee);
-    }
-
-    public List<Employee> getReports() {
-        return directReports;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getCommits() {
-        return commitCount;
-    }
-
-    @Override
-    public String toString() {
-        return this.getName();
-    }
-}
-
 public class CommitTree {
 
     public static final int MAX_REPORTS = 10;
     static Random random = new Random();
-
-    public static void traverseHierarchy(Employee manager) {
-        traverseHierarchy(manager, "");
-    }
-    public static void traverseHierarchy(Employee manager, String indent) {
-        System.out.println(indent + manager + " " + "\t\t(Commits: " + manager.getCommits() + ")");
-        for (Employee employee : manager.getReports()) {
-            traverseHierarchy(employee, indent + "  ");
-        }
-    }
-
-    public static int aggregateCommits(Employee manager) {
-        int totalcommits = manager.getCommits();
-        for (Employee employee : manager.getReports()) {
-            totalcommits += aggregateCommits(employee);
-        }
-        return totalcommits;
-    }
-
+    
     public static void main(String[] args) {
 
         // Construct the employee hierarchy
@@ -100,5 +40,23 @@ public class CommitTree {
             }
             ceo.addReport(manager);
         }
+    }
+
+    private static void traverseHierarchy(Employee manager) {
+        traverseHierarchy(manager, "");
+    }
+    private static void traverseHierarchy(Employee manager, String indent) {
+        System.out.println(indent + manager + " " + "\t\t(Commits: " + manager.getCommits() + ")");
+        for (Employee employee : manager.getReports()) {
+            traverseHierarchy(employee, indent + "  ");
+        }
+    }
+
+    private static int aggregateCommits(Employee manager) {
+        int totalcommits = manager.getCommits();
+        for (Employee employee : manager.getReports()) {
+            totalcommits += aggregateCommits(employee);
+        }
+        return totalcommits;
     }
 }
