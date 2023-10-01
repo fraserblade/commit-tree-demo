@@ -6,12 +6,12 @@ public class CommitTree {
 
     public static final int MAX_REPORTS = 10;
     static Random random = new Random();
-    
+
     public static void main(String[] args) {
 
         // Construct the employee hierarchy
         //
-        final Employee ceo = new Employee("Charlie Eric OWens" + " (CEO)", 0);
+        final Employee ceo = new Employee("Charlie Eric Owens (CEO)", 0);
         buildOrgHierarchy(ceo);
 
         // Show the hierarchy
@@ -20,12 +20,18 @@ public class CommitTree {
 
         // Walk the hierarchy and total the commits
         //
-        System.out.println("Total commits for " + ceo + ", " + aggregateCommits(ceo));
+        System.out.println("Total commits for " + ceo + " " + aggregateCommits(ceo));
 
         // Same for next report down
         //
-        Employee ceoFirstReport = ceo.getReports().get(1);
-        System.out.println("Total commits for " + ceoFirstReport + ", " + aggregateCommits(ceoFirstReport));
+        Employee ceoFirstReport = ceo.getReports().get(0);
+        System.out.println("Total commits for " + ceoFirstReport + " " + aggregateCommits(ceoFirstReport));
+
+        // Same for last report
+        //
+        Employee ceoLastReport = ceo.getReports().get(ceo.getReports().size() - 1);
+        System.out.println("Total commits for " + ceoLastReport + " " + aggregateCommits(ceoLastReport));
+
     }
 
     private static void buildOrgHierarchy(Employee ceo) {
