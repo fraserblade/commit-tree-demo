@@ -9,7 +9,7 @@ class Employee {
     static Random random = new Random();
 
     public Employee() {
-        this(random.nextInt(100));
+        this(random.nextInt(50));
     }
 
     public Employee(int commits){
@@ -46,9 +46,12 @@ class Employee {
 
 public class CommitTree {
 
-    public static final int MAX_REPORTS = 9;
+    public static final int MAX_REPORTS = 10;
     static Random random = new Random();
 
+    public static void traverseHierarchy(Employee manager) {
+        traverseHierarchy(manager, "");
+    }
     public static void traverseHierarchy(Employee manager, String indent) {
         System.out.println(indent + manager + " " + "\t\t(Commits: " + manager.getCommits() + ")");
         for (Employee employee : manager.getReports()) {
@@ -68,27 +71,34 @@ public class CommitTree {
 
         // Construct the employee hierarchy
         //
-        Employee ceo = new Employee("Charlie Eric OWens" + " (CEO)", 0);
+        final Employee ceo = new Employee("Charlie Eric OWens" + " (CEO)", 0);
+        buildOrgHierarchy(ceo);
+
+        // Show the hierarchy
+        //
+        traverseHierarchy(ceo);
+
+        // Walk the hierarchy and total the commits
+        //
+        System.out.println("Total commits for " + ceo + ", " + aggregateCommits(ceo));
+
+        // Same for next report down
+        //
+        Employee ceoFirstReport = ceo.getReports().get(1);
+        System.out.println("Total commits for " + ceoFirstReport + ", " + aggregateCommits(ceoFirstReport));
+    }
+
+    private static void buildOrgHierarchy(Employee ceo) {
         Employee manager = null;
 
-        for(int i = 0; i < random.nextInt(MAX_REPORTS); i++ ) {
+        random.nextInt();
+
+        for(int i = 0; i < random.nextInt(MAX_REPORTS) + 1; i++ ) {
             manager = new Employee();
-            for (int j = 0; j < random.nextInt(MAX_REPORTS); j++) {
+            for (int j = 0; j < random.nextInt(MAX_REPORTS) + 1; j++) {
                 manager.addReport(new Employee());
             }
             ceo.addReport(manager);
         }
-
-        // Walk the whole hierarchy
-        //
-        traverseHierarchy(ceo, "");
-
-        // Walk the hierarchy and total the commits
-        //
-        int totalCommits = aggregateCommits(ceo);
-        System.out.println("Total commits for CEO: " + totalCommits);
-
-        totalCommits = aggregateCommits(manager);
-        System.out.println("Total commits for  " + manager + ", " + totalCommits);
     }
 }
