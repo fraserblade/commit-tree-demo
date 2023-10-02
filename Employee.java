@@ -4,7 +4,7 @@ import java.util.Random;
 
 class Employee {
     private final String name;
-    private final List<Employee> directReports;
+    private final List<Employee> reports;
     private int commitCount;
     static Random random = new Random();
 
@@ -18,16 +18,16 @@ class Employee {
 
     public Employee(String name, int commits) {
         this.name = name;
-        this.directReports = new ArrayList<>();
+        this.reports = new ArrayList<>();
         this.commitCount = commits;
     }
 
     public void addReport(Employee employee) {
-        directReports.add(employee);
+        reports.add(employee);
     }
 
     public List<Employee> getReports() {
-        return directReports;
+        return reports;
     }
 
     public String getName() {
@@ -40,6 +40,6 @@ class Employee {
 
     @Override
     public String toString() {
-        return this.getName();
+        return this.getName() + (reports.size() > 0 ? " " + reports.size() : "");
     }
 }

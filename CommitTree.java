@@ -1,10 +1,8 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class CommitTree {
 
-    public static final int MAX_REPORTS = 10;
+    public static final int MAX_REPORTS = 6;
     static Random random = new Random();
 
     public static void main(String[] args) {
@@ -12,15 +10,19 @@ public class CommitTree {
         // Construct the employee hierarchy
         //
         final Employee ceo = new Employee("Charlie Eric Owens (CEO)", 0);
-        buildOrgHierarchy(ceo);
+        buildOrgHierarchy(ceo, 2);
 
         // Show the hierarchy
         //
-        traverseHierarchy(ceo);
+        showHierarchy(ceo);
+
+        // Show DRs only for ceo
+        showHierarchy(ceo, false);
 
         // Walk the hierarchy and total the commits
         //
         System.out.println("Total commits for " + ceo + " " + aggregateCommits(ceo));
+        System.out.println("Total commits for " + ceo + " DRs " + aggregateCommits(ceo, false));
 
         // Same for next report down
         //
@@ -31,37 +33,49 @@ public class CommitTree {
         //
         Employee ceoLastReport = ceo.getReports().get(ceo.getReports().size() - 1);
         System.out.println("Total commits for " + ceoLastReport + " " + aggregateCommits(ceoLastReport));
-
     }
 
-    private static void buildOrgHierarchy(Employee ceo) {
-        Employee manager = null;
+    static void buildOrgHierarchy(Employee employee, int depth) {
+        if (depth <= 0) {
+            return;
+        }
 
-        random.nextInt();
-
-        for(int i = 0; i < random.nextInt(MAX_REPORTS) + 1; i++ ) {
-            manager = new Employee();
-            for (int j = 0; j < random.nextInt(MAX_REPORTS) + 1; j++) {
-                manager.addReport(new Employee());
-            }
-            ceo.addReport(manager);
+        int numReports = random.nextInt(MAX_REPORTS) + 1;
+        for (int i = 0; i < numReports; i++) {
+            Employee report = new Employee();
+            buildOrgHierarchy(report, depth - 1);
+            employee.addReport(report);
         }
     }
 
-    private static void traverseHierarchy(Employee manager) {
-        traverseHierarchy(manager, "");
+    static void showHierarchy(Employee manager) {
+        showHierarchy(manager, "", true);
     }
-    private static void traverseHierarchy(Employee manager, String indent) {
+
+    static void showHierarchy(Employee manager, boolean recurse) {
+        showHierarchy(manager, "", recurse);
+    }
+
+    static void showHierarchy(Employee manager, String indent, boolean recurse) {
         System.out.println(indent + manager + " " + "\t\t(Commits: " + manager.getCommits() + ")");
         for (Employee employee : manager.getReports()) {
-            traverseHierarchy(employee, indent + "  ");
+            if(recurse) {
+                showHierarchy(employee, indent + "   ", true) ;
+            }
+            else {
+                System.out.println("   " + employee  + "\t\t(Commits: " + employee.getCommits() + ")");
+            }
         }
     }
 
-    private static int aggregateCommits(Employee manager) {
+    static int aggregateCommits(Employee manager) {
+        return aggregateCommits(manager, true);
+    }
+
+    static int aggregateCommits(Employee manager, boolean recursive) {
         int totalcommits = manager.getCommits();
         for (Employee employee : manager.getReports()) {
-            totalcommits += aggregateCommits(employee);
+            totalcommits += (recursive ? aggregateCommits(employee) : employee.getCommits());
         }
         return totalcommits;
     }
