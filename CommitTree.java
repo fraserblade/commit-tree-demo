@@ -3,6 +3,7 @@ import java.util.Random;
 public class CommitTree {
 
     public static final int MAX_REPORTS = 6;
+    public static final int HIERARCHY_DEPTH = 3;
     static Random random = new Random();
 
     public static void main(String[] args) {
@@ -10,7 +11,7 @@ public class CommitTree {
         // Construct the employee hierarchy
         //
         final Employee ceo = new Employee("Charlie Eric Owens (CEO)", 0);
-        buildOrgHierarchy(ceo, 2);
+        buildOrgHierarchy(ceo, HIERARCHY_DEPTH);
 
         // Show the hierarchy
         //

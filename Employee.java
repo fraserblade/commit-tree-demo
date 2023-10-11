@@ -5,8 +5,10 @@ import java.util.Random;
 class Employee {
     private final String name;
     private final List<Employee> reports;
+    private final int empNo;
     private int commitCount;
     static Random random = new Random();
+    static private int empCounter = 1;
 
     public Employee() {
         this(random.nextInt(50));
@@ -20,6 +22,7 @@ class Employee {
         this.name = name;
         this.reports = new ArrayList<>();
         this.commitCount = commits;
+        this.empNo = empCounter++;
     }
 
     public void addReport(Employee employee) {
@@ -40,6 +43,6 @@ class Employee {
 
     @Override
     public String toString() {
-        return this.getName() + (reports.size() > 0 ? " " + reports.size() : "");
+        return this.getName() + " id " + this.empNo + (reports.size() > 0 ? " " + reports.size() : "");
     }
 }
