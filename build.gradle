@@ -1,0 +1,21 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // Add any additional dependencies your project requires here.
+}
+
+application {
+    // Define the main class for your application
+    mainClassName = 'CommitTree' // Replace with your main class
+}
+
+version = '1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
