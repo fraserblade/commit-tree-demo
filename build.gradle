@@ -7,12 +7,20 @@ repositories {
 }
 
 dependencies {
-    // Add any additional dependencies your project requires here.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
 }
 
 application {
     // Define the main class for your application
-    mainClassName = 'CommitTree' // Replace with your main class
+    mainClassName = 'src.main.java.CommitTree' // Replace with your main class
 }
 
 version = '1.0'
