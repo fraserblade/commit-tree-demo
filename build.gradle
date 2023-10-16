@@ -20,7 +20,7 @@ test {
 
 application {
     // Define the main class for your application
-    mainClassName = 'src.main.java.CommitTree' // Replace with your main class
+    mainClassName = 'com.lbg.cds.CommitTree' // Replace with your main class
 }
 
 version = '1.0'
