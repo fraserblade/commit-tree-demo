@@ -3,6 +3,9 @@ package com.lbg.cds;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Map;
+import java.util.HashMap;
+
 
 public class Employee {
     private final String name;
@@ -12,6 +15,7 @@ public class Employee {
     private String employeeID;
     static Random random = new Random();
     static private int empCounter = 1;
+    static final public Map<String, Employee > map = new HashMap<>();
 
     public Employee() {
         this(random.nextInt(50));
@@ -27,6 +31,7 @@ public class Employee {
         this.commitCount = commits;
         this.empNo = empCounter++;
         this.employeeID = EmployeeIDGenerator.generateUniqueEmployeeID();
+        map.put(employeeID, this );
     }
 
     public void addReport(Employee employee) {

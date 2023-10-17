@@ -36,6 +36,13 @@ public class CommitTree {
         //
         Employee ceoLastReport = ceo.getReports().get(ceo.getReports().size() - 1);
         System.out.println("Total commits for " + ceoLastReport + " " + aggregateCommits(ceoLastReport));
+
+        // Demo getting employee back from map
+        //
+        System.out.println(ceoLastReport.getEmployeeID());
+        Employee e = Employee.map.get(ceoLastReport.getEmployeeID());
+        System.out.println(e);
+        showHierarchy(e);
     }
 
     static void buildOrgHierarchy(Employee employee, int depth) {
