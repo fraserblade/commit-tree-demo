@@ -42,4 +42,13 @@ class EmployeeTest {
         String expected = "John Doe - " + employee.getEmployeeID();
         assertEquals(expected, employee.toString());
     }
+
+    @Test
+    void testFind() {
+        String empID = employee.getEmployeeID();
+
+        Employee e = Employee.find(empID);
+
+        assertEquals(e, employee, "Should be same object");
+    }
 }

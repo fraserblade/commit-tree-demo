@@ -15,7 +15,7 @@ public class Employee {
     private String employeeID;
     static Random random = new Random();
     static private int empCounter = 1;
-    static final public Map<String, Employee > map = new HashMap<>();
+    static final private Map<String, Employee> map = new HashMap<>();
 
     public Employee() {
         this(random.nextInt(50));
@@ -54,5 +54,9 @@ public class Employee {
     @Override
     public String toString() {
         return this.getName() + " - " + this.employeeID + (reports.size() > 0 ? " (" + reports.size() + ")" : "");
+    }
+
+    public static Employee find(String employeeID) {
+        return map.get(employeeID);
     }
 }

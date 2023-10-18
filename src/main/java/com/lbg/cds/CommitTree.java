@@ -39,8 +39,9 @@ public class CommitTree {
 
         // Demo getting employee back from map
         //
-        System.out.println(ceoLastReport.getEmployeeID());
-        Employee e = Employee.map.get(ceoLastReport.getEmployeeID());
+        String empID = ceoLastReport.getEmployeeID();
+        System.out.println(empID);
+        Employee e = Employee.find(empID);
         System.out.println(e);
         showHierarchy(e);
     }
